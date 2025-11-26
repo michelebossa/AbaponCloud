@@ -9,18 +9,17 @@ draft table ZBIGLIETTO_MB2_D
 etag master Locallastchanged
 lock master total etag ModificatoA
 authorization master( global )
+early numbering //by system on field IdBiglietto
 {
-  field ( mandatory : create )
-   IdBiglietto;
+ // field ( mandatory : create )
+ //  IdBiglietto;
 
   field ( readonly )
    CreatoDa,
    CreatoA,
    ModificatoDa,
    ModificatoA,
-   Locallastchanged;
-
-  field ( readonly : update )
+   Locallastchanged,
    IdBiglietto;
 
 
