@@ -1,0 +1,4 @@
+@EndUserText.label: 'Biglietto Odata V2 Servizzio'
+define service ZUI_Biglietto_mB_srv_v2 {
+  expose ZC_BIGLIETTO_MB;
+}

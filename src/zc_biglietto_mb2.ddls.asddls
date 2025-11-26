@@ -1,0 +1,37 @@
+@Metadata.allowExtensions: true
+@Metadata.ignorePropagatedAnnotations: true
+@EndUserText: {
+  label: 'Biglietto Endusertext'
+}
+@ObjectModel: {
+  sapObjectNodeType.name: 'ZBIGLIETTO_MB2'
+}
+@AccessControl.authorizationCheck: #MANDATORY
+define root view entity ZC_BIGLIETTO_MB2
+  provider contract transactional_query
+  as projection on ZR_BIGLIETTO_MB2
+  association [1..1] to ZR_BIGLIETTO_MB2 as _BaseEntity on $projection.IdBiglietto = _BaseEntity.IdBiglietto
+{
+  key IdBiglietto,
+  @Semantics: {
+    user.createdBy: true
+  }
+  CreatoDa,
+  @Semantics: {
+    systemDateTime.createdAt: true
+  }
+  CreatoA,
+  @Semantics: {
+    user.lastChangedBy: true
+  }
+  ModificatoDa,
+  @Semantics: {
+    systemDateTime.lastChangedAt: true
+  }
+  ModificatoA,
+  @Semantics: {
+    systemDateTime.localInstanceLastChangedAt: true
+  }
+  Locallastchanged,
+  _BaseEntity
+}
