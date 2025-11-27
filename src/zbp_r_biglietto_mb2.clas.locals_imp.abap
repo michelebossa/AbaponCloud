@@ -17,13 +17,13 @@ CLASS lhc_zr_biglietto_mb2 IMPLEMENTATION.
 * SELECT MAX( IdBiglietto ) AS max_id
 *  FROM zr_biglietto_mb2 INTO @DATA(lv_max_id).
 
-    WITH +big AS (
-      SELECT MAX( IdBiglietto )  AS max_id
-      FROM zr_biglietto_mb2
-      UNION
-      SELECT MAX( IdBiglietto )  AS max_id
-      FROM zbiglietto_mb2_d
-    )    SELECT MAX( max_id ) FROM +big INTO @DATA(lv_max_id) .
+*    WITH +big AS (
+*      SELECT MAX( IdBiglietto )  AS max_id
+*      FROM zr_biglietto_mb2
+*      UNION
+*      SELECT MAX( IdBiglietto )  AS max_id
+*      FROM zbiglietto_mb2_d
+*    )    SELECT MAX( max_id ) FROM +big INTO @DATA(lv_max_id) .
 
     LOOP AT entities ASSIGNING FIELD-SYMBOL(<fs_biglietto>).
 
@@ -32,25 +32,35 @@ CLASS lhc_zr_biglietto_mb2 IMPLEMENTATION.
       ELSE.
 
 * Renge numerazione ZID_BIG_MB
+TRY.
+        cl_numberrange_runtime=>number_get(
+          EXPORTING
+            nr_range_nr = '01'
+            object      = 'ZID_BIG_MB'
+            quantity = '1'
+          IMPORTING
+            number      = DATA(lv_max)
+            returncode = DATA(code)
+            returned_quantity = DATA(return_qty) ).
+
+CATCH cx_nr_object_not_found INTO DATA(lx_obj_not_found).
+      CATCH cx_number_ranges INTO DATA(lx_ranges_error).
+
+        LOOP AT entities INTO DATA(entity_line).
+
+          APPEND VALUE #( %cid = entity_line-%cid
+                          %key  = entity_line-%key ) TO failed-biglietto.
+          APPEND VALUE #( %cid = entity_line-%cid
+                          %key = entity_line-%key
+                          %msg = lx_ranges_error ) TO reported-biglietto.
+        ENDLOOP.
+        EXIT.
+    ENDTRY.
 
 
 
-*        TRY.
-*            DATA(lo_get_number) = cl_numberrange_buffer=>get_instance( ).
-*            lo_get_number->if_numberrange_buffer~number_get_no_buffer( EXPORTING
-*            iv_object    = 'ZID_BIG_MB'
-*             iv_subobject = '01'
-*                                                           iv_interval  = '01'
-*                                                                 iv_quantity  = 1
-*                                             iv_ignore_buffer     = abap_true
-*                                                              IMPORTING
-*            ev_number    = DATA(lv_max)
-**                                             ev_returned_quantity = lv_returned_qunatity
-*                                                         ).
-*          CATCH cx_number_ranges INTO DATA(lr_error).
-*        ENDTRY.
-        lv_max_id += 1.
-        lv_id = lv_max_id.
+*        lv_max_id += 1.
+        lv_id = lv_max. "lv_max_id.
       ENDIF.
       APPEND VALUE #( %cid = <fs_biglietto>-%cid
                       %is_draft = <fs_biglietto>-%is_draft
