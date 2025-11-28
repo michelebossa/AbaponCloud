@@ -9,7 +9,7 @@ use etag
 {
   use create;
   use update;
-//  use delete;
+  //  use delete;
 
   use function GetDefaultsForCreate;
 
@@ -20,4 +20,14 @@ use etag
   use action Prepare;
   use action CustomDelete;
 
+  use association _Componenti { create; with draft; }
+}
+define behavior for ZC_COMPONENTI_MB alias ZcComponentiMb
+extensible
+use etag
+{
+  //  use create;
+  use update;
+  use delete;
+  use association _Biglietto { with draft; }
 }

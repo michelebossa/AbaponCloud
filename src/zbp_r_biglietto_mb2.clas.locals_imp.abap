@@ -18,7 +18,9 @@ CLASS lhc_zr_biglietto_mb2 DEFINITION INHERITING FROM cl_abap_behavior_handler.
 *      onChange FOR DETERMINE ON MODIFY
 *        IMPORTING keys FOR Biglietto~onChange,
       CustomDelete FOR MODIFY
-        IMPORTING keys FOR ACTION Biglietto~CustomDelete RESULT result.
+        IMPORTING keys FOR ACTION Biglietto~CustomDelete RESULT result,
+      earlynumbering_cba_Componenti FOR NUMBERING
+        IMPORTING entities FOR CREATE Biglietto\_Componenti.
 ENDCLASS.
 
 CLASS lhc_zr_biglietto_mb2 IMPLEMENTATION.
@@ -233,6 +235,37 @@ CLASS lhc_zr_biglietto_mb2 IMPLEMENTATION.
 *        IN LOCAL MODE
 *        ENTITY Biglietto
 *        UPDATE FROM lt_update.
+  ENDMETHOD.
+
+  METHOD earlynumbering_cba_Componenti.
+    DATA: lv_start  TYPE i,
+          ls_mapped LIKE LINE OF mapped-componenti.
+    READ ENTITIES OF zr_biglietto_mb2 IN LOCAL MODE
+      ENTITY Biglietto BY \_Componenti
+      ALL FIELDS
+      WITH VALUE #( FOR line IN entities ( IdBiglietto = line-IdBiglietto %is_draft = line-%is_draft  ) )
+      RESULT DATA(lt_component).
+    SORT lt_component BY progressivo DESCENDING.
+    READ TABLE lt_component INTO DATA(ls_component) INDEX 1.
+    IF sy-subrc = 0.
+      lv_start  = ls_component-Progressivo .
+    ELSE.
+      lv_start = 0.
+    ENDIF.
+    LOOP AT entities ASSIGNING FIELD-SYMBOL(<fs_componente>).
+*
+      LOOP AT <fs_componente>-%target
+        INTO DATA(target).
+        lv_start += 1.
+        CLEAR ls_mapped.
+        ls_mapped-%cid        = target-%cid.
+        ls_mapped-%is_draft   = target-%is_draft.
+        ls_mapped-IdBiglietto = target-IdBiglietto.
+        ls_mapped-Progressivo = lv_start.
+        APPEND ls_mapped
+            TO mapped-componenti.
+      ENDLOOP.
+    ENDLOOP.
   ENDMETHOD.
 
 ENDCLASS.

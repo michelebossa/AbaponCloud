@@ -1,23 +1,24 @@
 @Metadata.allowExtensions: true
 @Metadata.ignorePropagatedAnnotations: true
 @EndUserText: {
-  label: 'Biglietto Endusertext'
+  label: '###GENERATED Core Data Service Entity'
 }
 @ObjectModel: {
-  sapObjectNodeType.name: 'ZBIGLIETTO_MB2'
-}
+  sapObjectNodeType.name: 'ZCOMPONENTI_MB'
+} 
 @AccessControl.authorizationCheck: #MANDATORY
-define root view entity ZC_BIGLIETTO_MB2
-  provider contract transactional_query
-  as projection on ZR_BIGLIETTO_MB2
-  association [1..1] to ZR_BIGLIETTO_MB2 as _BaseEntity on $projection.IdBiglietto = _BaseEntity.IdBiglietto
+define view entity ZC_COMPONENTI_MB
+//  provider contract transactional_query
+  as projection on ZR_COMPONENTI_MB
+  association [1..1] to ZR_COMPONENTI_MB as _BaseEntity on $projection.IdBiglietto = _BaseEntity.IdBiglietto and $projection.Progressivo = _BaseEntity.Progressivo
 {
   key IdBiglietto,
+  key Progressivo,
+  TipoUtente,
   @Semantics: {
     user.createdBy: true
-  }  
+  }
   CreatoDa,
-  Stato,
   @Semantics: {
     systemDateTime.createdAt: true
   }
@@ -33,7 +34,7 @@ define root view entity ZC_BIGLIETTO_MB2
   @Semantics: {
     systemDateTime.localInstanceLastChangedAt: true
   }
-  Locallastchanged,
+  //Locallastchanged,
   _BaseEntity,
-  _Componenti : redirected to composition child ZC_COMPONENTI_MB
+  _Biglietto: redirected to parent ZC_BIGLIETTO_MB2
 }

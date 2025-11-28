@@ -50,5 +50,51 @@ early numbering //by system on field IdBiglietto
       ModificatoA      = modificato_a;
       Locallastchanged = locallastchanged;
     }
+association _Componenti {create; with draft; }
+}
 
+
+define behavior for ZR_COMPONENTI_MB alias Componenti
+persistent table ZCOMPONENTI_MB
+extensible
+draft table ZCOMPONENTI_MB_D
+etag dependent
+lock dependent
+authorization dependent
+early numbering
+{
+//  field ( mandatory : create )
+ //  ,
+//   Progressivo;
+
+  field ( readonly )
+  Progressivo,
+  IdBiglietto,
+   CreatoDa,
+   CreatoA,
+   ModificatoDa,
+   ModificatoA;
+//
+//  field ( readonly : update )
+////   IdBiglietto,
+//   Progressivo;
+
+
+  //create;
+  update;
+  delete;
+
+
+  mapping for ZCOMPONENTI_MB corresponding extensible
+  {
+    IdBiglietto = id_biglietto;
+    Progressivo = progressivo;
+    TipoUtente = tipo_utente;
+    CreatoDa = creato_da;
+    CreatoA = creato_a;
+    ModificatoDa = modificato_da;
+    ModificatoA = modificato_a;
+//    Locallastchanged = locallastchanged;
+  }
+ association _Biglietto {  with draft; }
 }

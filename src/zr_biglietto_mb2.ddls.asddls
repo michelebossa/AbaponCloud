@@ -4,6 +4,7 @@
 @EndUserText.label: 'Biglietto'
 define root view entity ZR_BIGLIETTO_MB2
   as select from zbiglietto_mb2 as Biglietto
+  composition [0..*] of ZR_COMPONENTI_MB as _Componenti
 {
   key id_biglietto as IdBiglietto,
   stato as Stato,
@@ -16,5 +17,7 @@ define root view entity ZR_BIGLIETTO_MB2
   @Semantics.systemDateTime.lastChangedAt: true
   modificato_a as ModificatoA,
   @Semantics.systemDateTime.localInstanceLastChangedAt: true
-  locallastchanged as Locallastchanged
+  locallastchanged as Locallastchanged,
+  // Associations  
+  _Componenti  
 }
