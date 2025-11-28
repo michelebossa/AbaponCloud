@@ -16,16 +16,38 @@ annotate view ZC_BIGLIETTO_MB2 with
   @UI.identification: [ {
     position: 10 , 
     label: 'IdBiglietto'
+  },
+  { 
+  position: 10 ,
+  type: #FOR_ACTION,
+  dataAction: 'CustomDelete',
+  label: 'Elimina Biglietto'
   } ]
   @UI.lineItem: [ {
     position: 10 , 
     label: 'IdBiglietto'
+  },
+  { 
+  position: 10 ,
+  type: #FOR_ACTION,
+  dataAction: 'CustomDelete',
+  label: 'Elimina Biglietto'
   } ]
   @UI.selectionField: [ {
     position: 10 
   } ]
   IdBiglietto;
-  
+  @EndUserText.label: 'Stato'
+  @UI.identification: [ {
+    position: 15 
+  } ]
+  @UI.lineItem: [ {
+    position: 15 
+  } ]
+  @UI.selectionField: [ {
+    position: 15 
+  } ]
+  Stato;  
   @UI.identification: [ {
     position: 20 
   } ]

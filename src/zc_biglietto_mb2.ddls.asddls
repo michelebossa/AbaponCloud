@@ -15,8 +15,9 @@ define root view entity ZC_BIGLIETTO_MB2
   key IdBiglietto,
   @Semantics: {
     user.createdBy: true
-  }
+  }  
   CreatoDa,
+  Stato,
   @Semantics: {
     systemDateTime.createdAt: true
   }

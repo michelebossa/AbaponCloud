@@ -9,12 +9,15 @@ use etag
 {
   use create;
   use update;
-  use delete;
+//  use delete;
+
+  use function GetDefaultsForCreate;
 
   use action Edit;
   use action Activate;
   use action Discard;
   use action Resume;
   use action Prepare;
+  use action CustomDelete;
 
 }
